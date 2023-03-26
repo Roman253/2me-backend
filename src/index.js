@@ -14,8 +14,7 @@ app.use(authUser);
 app.use(userFriends);
 
 
-const mongoUri = 
-    'mongodb+srv://Roman:Mongodb12023!@cluster0.ixeug.mongodb.net/?retryWrites=true&w=majority'
+const mongoUri = 'mongodb+srv://2Me:Mongodb12023!@cluster0.ixeug.mongodb.net/?retryWrites=true&w=majority'
 mongoose.connect(mongoUri);
 
 mongoose.connection.on('connected', () => {

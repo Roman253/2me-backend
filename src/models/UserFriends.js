@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const pointSchema = new mongoose.Schema({
     token: {
-        userToken: friend.token
+        userToken: mongoose.Schema.Types.String
     },
 });
 

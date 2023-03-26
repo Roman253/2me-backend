@@ -4,7 +4,7 @@ const { addListener } = require('nodemon');
 const requireAuth = require('../middlewares/requireAuth');
 
 const UserFriends = mongoose.model('UserFriends');
-const Users = mongoose.model('Users');
+const Users = mongoose.model('User');
 
 const router = express.Router();
 
