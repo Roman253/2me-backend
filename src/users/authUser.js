@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const User = mongoose.model('User');
+const requireAuth = require('../middlewares/requireAuth');
+
 
 
 const router = express.Router();
@@ -16,7 +18,8 @@ router.post('/signup', async (req, res) => {
         const token = jwt.sign({ userId: user._id }, 'MY_SECRET_KEY' );
         res.send({ token });
     } catch (err) {
-        return res.status(422).send('err.message');
+        console.log(err);
+        return res.status(422).send({err});
     }
 });
 
@@ -35,10 +38,27 @@ router.post('/signin',  async (req, res) => {
     try {
         await user.comparePassword(password);
         const token = jwt.sign({ userId: user._id },'MY_SECRET_KEY')
-        res.send({ token });
+        res.send({ token,  user: {userName: user.userName, email: user.email, _id: user._id} });
     } catch (err) {
         return res.status(422).send({ error: 'Invalid password or email'});
     }
 });
+
+router.post('/profile', requireAuth, async (req, res) => {
+    
+    try {
+        await User.findByIdAndUpdate(req.user._id, req.body);
+        res.status(200).send();
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: error.message });
+    }
+});
+
+router.post('/notificationToken',requireAuth, async (req, res) => {
+    const token = req.body.token;
+    await User.findByIdAndUpdate(req.user._id,{ notificationToken: token }, {upsert: true});
+    res.status(200).send();
+})
 
 module.exports = router; 

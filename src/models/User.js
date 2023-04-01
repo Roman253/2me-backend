@@ -15,6 +15,12 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },
+    friends: {
+        type: Array,
+    },
+    notificationToken: {
+        type: String,
     }
 });
 
