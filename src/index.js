@@ -30,7 +30,7 @@ mongoose.connection.on('error', (err) => {
 });
 
 app.get('/', (req, res) => {
-    res.send(`Your User Name: ${req.user.userName}, you email: ${req.user.email}`);
+    res.send('2Me API');
 });
 
 app.listen(3000, () => {
