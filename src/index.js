@@ -14,8 +14,6 @@ const app = express();
 
 app.use(morgan('combined'));
 app.use(bodyParser.json());
-app.use(authUser);
-app.use(userFriends);
 
 
 const mongoUri = 'mongodb+srv://2Me:Mongodb12023!@cluster0.ixeug.mongodb.net/2Me?retryWrites=true&w=majority'
@@ -30,8 +28,10 @@ mongoose.connection.on('error', (err) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('2Me API');
+    res.status(200).send('2Me API');
 });
+app.use(authUser);
+app.use(userFriends);
 
 app.listen(3000, () => {
     console.log('listening on port 3000');
