@@ -16,7 +16,7 @@ app.use(morgan('combined'));
 app.use(bodyParser.json());
 
 
-const mongoUri = 'mongodb+srv://2Me:Mongodb12023!@cluster0.ixeug.mongodb.net/2Me?retryWrites=true&w=majority'
+const mongoUri = 'mongodb+srv://2Me:XXXXXXXXX@cluster0.ixeug.mongodb.net/2Me?retryWrites=true&w=majority'
 mongoose.connect(mongoUri);
 
 mongoose.connection.on('connected', () => {
