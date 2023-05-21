@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const User = mongoose.model('User');
 const requireAuth = require('../middlewares/requireAuth');
-
+const bcrypt = require('bcrypt');
 
 
 const router = express.Router();
@@ -47,7 +47,24 @@ router.post('/signin',  async (req, res) => {
 router.post('/profile', requireAuth, async (req, res) => {
     
     try {
-        await User.findByIdAndUpdate(req.user._id, req.body);
+        const data = req.body;
+        if(data.password){
+            bcrypt.genSalt(10, (err, salt) => {
+                if (err) {
+                    console.log(err.message)
+                    return ;
+                }
+        
+                bcrypt.hash(user.password, salt, (err, hash) => {
+                    if (err) {
+                        console.log(err.message)
+                        return 
+                    }
+                    data.password = hash;
+                });
+            });
+        }
+        await User.findByIdAndUpdate(req.user._id, data);
         res.status(200).send();
     } catch (error) {
         console.log(error);
