@@ -48,6 +48,9 @@ router.post('/profile', requireAuth, async (req, res) => {
     
     try {
         const data = req.body;
+        console.log('====================================');
+        console.log(data);
+        console.log('====================================');
         if(data.password){
             bcrypt.genSalt(10, (err, salt) => {
                 if (err) {
@@ -55,12 +58,13 @@ router.post('/profile', requireAuth, async (req, res) => {
                     return ;
                 }
         
-                bcrypt.hash(user.password, salt, (err, hash) => {
+                bcrypt.hash(data.password, salt, (err, hash) => {
                     if (err) {
                         console.log(err.message)
                         return 
                     }
                     data.password = hash;
+                    console.log('Password hashed and saved');
                 });
             });
         }
