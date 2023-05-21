@@ -51,25 +51,24 @@ router.post('/profile', requireAuth, async (req, res) => {
         console.log('====================================');
         console.log(data);
         console.log('====================================');
-        if(data.password){
-            bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.genSalt(10, (err, salt) => {
+            if (err) {
+                console.log(err.message)
+                return ;
+            }
+    
+            bcrypt.hash(data.password, salt,async (err, hash) => {
                 if (err) {
                     console.log(err.message)
-                    return ;
+                    return 
                 }
-        
-                bcrypt.hash(data.password, salt, (err, hash) => {
-                    if (err) {
-                        console.log(err.message)
-                        return 
-                    }
-                    data.password = hash;
-                    console.log('Password hashed and saved');
-                });
+                data.password = hash;
+                console.log(data)
+                console.log('Password hashed and saved');
+                await User.findByIdAndUpdate(req.user._id, data);
+                res.status(200).send();
             });
-        }
-        await User.findByIdAndUpdate(req.user._id, data);
-        res.status(200).send();
+        });
     } catch (error) {
         console.log(error);
         res.status(500).send({ error: error.message });
