@@ -11,7 +11,8 @@ const router = express.Router();
 router.use(requireAuth);
 
 router.get('/friends', async (req, res) => {
-    const friends = (await Users.findById(req.user._id, 'friends')).friends;
+    const User = await Users.findById(req.user._id);
+    const friends = await Users.find({ _id: { $in: User.friends } }, 'userName email notificationToken _id');
     res.send(friends);
 });
 
@@ -38,8 +39,18 @@ router.post('/friends', async (req, res) => {
                 .status(422)
                 .send({ error: 'Invalid friend Id'});
         }
+
+        // see if friend is already in the user's friends list
+        const user = await Users.findById(req.user._id);
+        const friendIndex = user.friends.indexOf(friendId);
+        if (friendIndex > -1) {
+            return res
+                .status(422)
+                .send({ error: 'Friend already added'});
+        }
+
         // add the friend to the user's friends list
-        await Users.findByIdAndUpdate(req.user._id, { $push: { friends: friend } }, {upsert: true});
+        await Users.findByIdAndUpdate(req.user._id, { $push: { friends: friendId } }, {upsert: true});
         res.status(200).send({ message: 'Friend added' });
     } catch (err) {
         res.status(500).send({ error: err.message });
