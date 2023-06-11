@@ -81,7 +81,7 @@ router.post('/notificationToken',requireAuth, async (req, res) => {
     res.status(200).send();
 })
 
-router.delete('/friends/${id}', async (req, res) => {
+router.delete('/friends/:id', async (req, res) => {
     try {
       const { id: friendId } = req.params;
       const userId = req.user._id;
