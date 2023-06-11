@@ -81,4 +81,28 @@ router.post('/notificationToken',requireAuth, async (req, res) => {
     res.status(200).send();
 })
 
+router.delete('/friends/${id}', async (req, res) => {
+    try {
+      const { id: friendId } = req.params;
+      const userId = req.user._id;
+      
+      // Find the user by their ID
+      const user = await User.findById(userId);
+  
+      // Remove the friend from the friends array
+      user.friends = user.friends.filter(friend => friend.toString() !== friendId);
+  
+      // Save the updated user
+      await user.save();
+  
+      // Return the updated user or a success message
+      res.json(user);
+    } catch (error) {
+      // Handle any errors
+      console.error(error);
+      res.status(500).json({ error: 'Failed to delete friend.' });
+    }
+  });
+  
+
 module.exports = router; 
